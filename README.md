@@ -41,7 +41,7 @@ flowchart LR
   c2 --> embed
   embed --> faiss[(FAISS index<br/>exact · HNSW · IVF)]
   embed --> bm25[(BM25 sparse index)]
-  clean --> graph[(Entity graph<br/>26,140 entities · 110,323 links)]
+  clean --> kg[(Entity graph<br/>26,140 entities · 110,323 links)]
   clean --> syn[(Abbreviation dictionary<br/>14,428 pairs)]
   faiss --> tree[(Topic tree<br/>40 topics · 349 sections)]
 ```
@@ -53,14 +53,14 @@ flowchart TB
   q([Question]) --> route{Query handling}
   route -->|as typed| chans
   route -->|synonyms| syn[Expand corpus abbreviations] --> chans
-  route -->|router| rules[Rules pick the route<br/>retry if key-word coverage < 0.6] --> chans
+  route -->|router| rules[Rules pick the route<br/>retry if key-word coverage below 0.6] --> chans
   chans[Search channels] --> bm25[BM25<br/>0.4 ms]
   chans --> dense[MedCPT vectors<br/>~40 ms]
-  chans --> graph[Graph traversal<br/>~100 ms]
+  chans --> gtrav[Graph traversal<br/>~100 ms]
   chans --> tree[Topic tree<br/>~15 ms]
   bm25 --> rrf[Reciprocal rank fusion]
   dense --> rrf
-  graph --> rrf
+  gtrav --> rrf
   tree --> rrf
   rrf --> rr[Optional cross-encoder rerank]
   rr --> ev[Evidence selection<br/>MMR 0.7, top 5]

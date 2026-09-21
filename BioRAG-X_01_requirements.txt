@@ -1,0 +1,8 @@
+datasets>=3.0
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.8
+pyarrow>=15.0
+ipykernel>=6.0
+jupyterlab>=4.0
+nbconvert>=7.0

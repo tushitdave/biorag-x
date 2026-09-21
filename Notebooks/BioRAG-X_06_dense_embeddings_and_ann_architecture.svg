@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<defs>
+<marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker>
+<style>
+.box{fill:#f7f7f7;stroke:#333;stroke-width:2;rx:14;ry:14}
+.small{fill:#fff;stroke:#555;stroke-width:1.5;rx:10;ry:10}
+.t{font:700 24px Arial;fill:#111}.h{font:600 17px Arial;fill:#111}.p{font:14px Arial;fill:#222}.n{font:13px Arial;fill:#555}
+</style>
+</defs>
+<text x="700" y="36" text-anchor="middle" class="t">BioRAG-X — Dense Embeddings &amp; ANN</text>
+<rect x="510" y="65" width="380" height="70" class="box"/>
+<text x="700" y="93" text-anchor="middle" class="h">Canonical passages + queries</text>
+<text x="700" y="116" text-anchor="middle" class="p">stable IDs • provenance • gold evidence</text>
+<line x1="700" y1="135" x2="700" y2="175" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<rect x="465" y="175" width="470" height="78" class="box"/>
+<text x="700" y="208" text-anchor="middle" class="h">MedCPT biomedical embedding layer</text>
+<text x="700" y="232" text-anchor="middle" class="p">query encoder + article encoder • normalized vectors</text>
+<line x1="585" y1="253" x2="350" y2="315" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<line x1="815" y1="253" x2="1050" y2="315" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<rect x="130" y="315" width="440" height="110" class="small"/>
+<text x="350" y="347" text-anchor="middle" class="h">Exact Dense Search</text>
+<text x="350" y="371" text-anchor="middle" class="p">compare query against all vectors</text>
+<text x="350" y="394" text-anchor="middle" class="n">reference-quality result for ANN</text>
+<rect x="830" y="315" width="440" height="110" class="small"/>
+<text x="1050" y="347" text-anchor="middle" class="h">ANN Search</text>
+<text x="1050" y="371" text-anchor="middle" class="p">HNSW • IVF / IVF-PQ</text>
+<text x="1050" y="394" text-anchor="middle" class="n">speed ↔ recall ↔ memory</text>
+<line x1="350" y1="425" x2="350" y2="495" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<line x1="1050" y1="425" x2="1050" y2="495" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<rect x="130" y="495" width="440" height="95" class="small"/>
+<text x="350" y="527" text-anchor="middle" class="h">Exact Benchmark</text>
+<text x="350" y="552" text-anchor="middle" class="p">Recall@K • MRR • nDCG • latency</text>
+<rect x="830" y="495" width="440" height="95" class="small"/>
+<text x="1050" y="527" text-anchor="middle" class="h">ANN Benchmark</text>
+<text x="1050" y="552" text-anchor="middle" class="p">Recall loss • speedup • memory</text>
+<line x1="570" y1="545" x2="830" y2="545" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+<text x="700" y="530" text-anchor="middle" class="n">Pareto comparison</text>
+<rect x="470" y="620" width="460" height="90" class="box"/>
+<text x="700" y="651" text-anchor="middle" class="h">Late Chunking Experiment</text>
+<text x="700" y="675" text-anchor="middle" class="p">long-context encode → contextual token states</text>
+<text x="700" y="696" text-anchor="middle" class="p">→ token-span pooling → chunk embeddings</text>
+<line x1="700" y1="590" x2="700" y2="620" stroke="#333" stroke-width="2" marker-end="url(#a)"/>
+</svg>

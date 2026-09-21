@@ -1,0 +1,46 @@
+# BioRAG-X experiment recipe: BM25 lexical baseline.
+experiment_id: EXP-baseline-bm25
+
+chunking:
+  mode: manual
+  method: passage           # same retrieval units as hybrid_rerank (controlled comparison)
+
+embedding:
+  model: none
+
+ann:
+  index: none
+
+retrieval:
+  mode: manual
+  channels:
+    - lexical
+  top_k: 40
+
+fusion:
+  method: none
+
+reranker:
+  enabled: false
+
+graph:
+  enabled: false
+
+pageindex:
+  enabled: false
+
+agent:
+  mode: manual
+  max_rounds: 1
+
+evidence:
+  selector: topk
+  top_k: 5
+
+generation:
+  enabled: true
+  llm: gpt-4o
+  temperature: 0.0
+
+citation:
+  validation: strict

@@ -1,0 +1,37 @@
+# Secrets: never commit. See .env.example for the variable names.
+.env
+.env.*
+!.env.example
+
+# Data, indexes and caches: rebuilt by the scripts in adaptive-biomed-rag/scripts/.
+# Together these are ~1.4 GB, far past what belongs in git.
+adaptive-biomed-rag/data/
+Notebooks/data/
+Notebooks/artifacts/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# Node / frontend build
+node_modules/
+dist/
+.vite/
+*.local
+
+# Logs and OS noise
+*.log
+_uvicorn_*.log
+.DS_Store
+
+# Documents kept out of the repository by choice; README.md is the exception.
+*.md
+!/README.md
+
+# Editor settings
+.vscode/

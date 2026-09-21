@@ -1,0 +1,54 @@
+# BioRAG-X experiment recipe: hybrid retrieval (BM25 + MedCPT dense) fused by RRF.
+# POC default. All-local retrieval; generation is LLM-capped + cached.
+experiment_id: EXP-hybrid-rerank
+
+chunking:
+  mode: manual
+  method: passage           # passage-as-is: all 28,001 usable passages
+
+embedding:
+  model: medcpt             # full-corpus MedCPT vectors (scripts/build_medcpt_index.py)
+
+ann:
+  index: exact              # FAISS IndexFlatIP (exact inner product)
+  metric: inner_product
+
+retrieval:
+  mode: manual
+  channels:
+    - lexical               # BM25
+    - dense                 # MedCPT
+  top_k: 40
+
+fusion:
+  method: rrf
+  k: 60
+
+reranker:
+  # Off: the lexical-overlap reranker undid MedCPT's paraphrase matches (gold evidence
+  # for 2/7 vs 7/7 conversational test questions). Next: MedCPT cross-encoder.
+  enabled: false
+  method: lexical_overlap
+  top_k: 10
+
+graph:
+  enabled: false
+
+pageindex:
+  enabled: false
+
+agent:
+  mode: manual
+  max_rounds: 1
+
+evidence:
+  selector: coverage_diversity
+  top_k: 5
+
+generation:
+  enabled: true
+  llm: gpt-4o               # only fires when LLM_ENABLED and within budget
+  temperature: 0.0
+
+citation:
+  validation: strict

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BioRAG-X Research Studio</title>
+<style>
+:root{
+  --bg:#f7f5f2; --paper:#fffdf9; --paper2:#f3f0eb;
+  --ink:#26231f; --muted:#77716a; --line:#e3ded7;
+  --accent:#c96b3b; --accent2:#e8c4b2; --accentSoft:#fbede6;
+  --gold:#c79a35; --goldSoft:#fbf4df;
+  --green:#4c7c63; --greenSoft:#eaf3ed;
+  --red:#b85c58; --redSoft:#f9e9e8;
+  --blue:#56749e; --blueSoft:#edf2f8;
+  --shadow:0 8px 30px rgba(55,45,35,.055);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.sidebar{background:#fbfaf7;border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh}
+.brand{font-size:20px;font-weight:800;letter-spacing:.01em}
+.brand small{display:block;font-size:10px;font-weight:500;color:var(--muted);margin-top:3px}
+.nav{margin-top:20px}
+.nav button{width:100%;border:0;background:transparent;color:#6f6861;text-align:left;padding:9px 10px;border-radius:8px;cursor:pointer;margin:1px 0}
+.nav button:hover,.nav button.active{background:#f2ece6;color:var(--accent);font-weight:700}
+.section-label{margin:19px 9px 6px;color:#9a938b;font-size:10px;text-transform:uppercase;letter-spacing:.12em}
+.main{padding:16px 24px 36px}
+.topbar{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.pills{display:flex;gap:6px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:#fffefa;color:#6d665f;border-radius:999px;padding:5px 9px;font-size:10px}
+.run{background:var(--accent);border:0;border-radius:7px;padding:9px 15px;color:#fffaf7;font-weight:800;cursor:pointer}
+.page{display:none}.page.active{display:block}
+h1{font-size:29px;line-height:1.1;margin:26px 0 4px}.lead{color:var(--muted);margin:0 0 20px}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1.3fr .7fr}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px;box-shadow:var(--shadow)}
+.card h3{font-size:11px;color:#766e66;text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px}
+.metric{font-size:28px;font-weight:800}.muted{color:var(--muted);font-size:12px}.good{color:var(--green)}.warn{color:var(--gold)}.bad{color:var(--red)}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.node{border:1px solid #ddd4ca;background:#fcfaf7;border-radius:9px;padding:10px 12px;font-size:11px}.arrow{color:#a39a91}
+.mode{display:flex;gap:5px;margin-bottom:11px}.mode button{border:1px solid var(--line);background:#fffefa;color:#766f68;padding:7px 10px;border-radius:7px;cursor:pointer}.mode button.sel{background:var(--accentSoft);border-color:#e4bca7;color:var(--accent);font-weight:700}
+.method-grid{display:flex;flex-wrap:wrap;gap:7px}.method{border:1px solid var(--line);background:#fffefa;color:#6f6861;border-radius:999px;padding:7px 10px;cursor:pointer;font-size:11px}.method.on{background:var(--goldSoft);border-color:#e3ca87;color:#725c1e}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid #eee9e3;padding:9px 0}.row:last-child{border-bottom:0}
+table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:9px 8px;border-bottom:1px solid #eee9e3;text-align:left}th{color:#8d857d;font-weight:700}
+.badge{border-radius:999px;padding:4px 7px;font-size:10px}.badge.good{background:var(--greenSoft);color:var(--green)}.badge.warn{background:var(--goldSoft);color:#856a20}.badge.bad{background:var(--redSoft);color:var(--red)}.badge.blue{background:var(--blueSoft);color:var(--blue)}
+.code{background:#faf8f5;border:1px solid var(--line);border-radius:9px;padding:12px;white-space:pre-wrap;font:11px ui-monospace,SFMono-Regular,Menlo,monospace;color:#5d5954}
+.claim{border:1px solid #e5e0da;background:#fffdfa;border-radius:9px;padding:10px;margin-top:8px}.cite{color:var(--accent);font-weight:800}
+.footer{font-size:10px;color:#aaa39b;margin-top:26px}
+.kicker{font-size:11px;color:#9a938b;text-transform:uppercase;letter-spacing:.12em}
+.big-score{display:flex;align-items:center;gap:16px}
+.score-circle{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;border:6px solid #d8eee1;background:#fff;color:var(--green);font-size:20px;font-weight:800}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">BioRAG-X<small>Research & Production Studio</small></div>
+  <div class="nav">
+    <div class="section-label">Core</div>
+    <button class="active" onclick="showPage('overview',this)">Overview</button>
+    <button onclick="showPage('benchmark',this)">Benchmark / 100 Queries</button>
+    <div class="section-label">Pipeline</div>
+    <button onclick="showPage('chunking',this)">Chunking</button>
+    <button onclick="showPage('retrieval',this)">Retrieval</button>
+    <button onclick="showPage('agent',this)">Agentic Orchestrator</button>
+    <button onclick="showPage('evidence',this)">Evidence & Grounding</button>
+    <button onclick="showPage('chat',this)">Biomedical Chat</button>
+    <div class="section-label">Research</div>
+    <button onclick="showPage('evaluation',this)">Evaluation Scorecard</button>
+    <button onclick="showPage('leaderboard',this)">Configuration Leaderboard</button>
+    <button onclick="showPage('ablation',this)">Ablation / Counterfactual</button>
+    <button onclick="showPage('failure',this)">Failure / Disagreement</button>
+    <div class="section-label">System</div>
+    <button onclick="showPage('architecture',this)">Architecture</button>
+    <button onclick="showPage('ops',this)">Observability / SLO</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="pills">
+      <span class="pill">EXP-0042</span><span class="pill">BioASQ · 100 fixed queries</span>
+      <span class="pill">Semantic</span><span class="pill">MedCPT</span>
+      <span class="pill">Hybrid-RRF</span><span class="pill">Citation Guard ON</span>
+    </div>
+    <button class="run" onclick="runExperiment()">Run experiment</button>
+  </div>
+
+  <section id="overview" class="page active">
+    <div class="kicker" style="margin-top:26px">Research Studio</div>
+    <h1>Build. Compare. Explain. Trust.</h1>
+    <p class="lead">BioRAG-X turns every retrieval decision into a measurable experiment.</p>
+    <div class="grid g4">
+      <div class="card"><h3>Answer Quality</h3><div class="metric">82.4%</div><div class="good" style="font-size:11px">+6.1 vs Hybrid</div></div>
+      <div class="card"><h3>Evidence Recall</h3><div class="metric">91.3%</div><div class="good" style="font-size:11px">Gold evidence coverage</div></div>
+      <div class="card"><h3>Citation Support</h3><div class="metric">94.5%</div><div class="good" style="font-size:11px">0.8% unsupported claims</div></div>
+      <div class="card"><h3>P95 Latency</h3><div class="metric">1.28s</div><div class="good" style="font-size:11px">Within SLO</div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>System Flow</h3><div class="flow">
+      <div class="node">Data</div><span class="arrow">→</span><div class="node">Chunking</div><span class="arrow">→</span><div class="node">Embedding / Index</div><span class="arrow">→</span><div class="node">Retrieval</div><span class="arrow">→</span><div class="node">Agent</div><span class="arrow">→</span><div class="node">Evidence</div><span class="arrow">→</span><div class="node">Generation</div><span class="arrow">→</span><div class="node">Citation Guard</div>
+    </div></div>
+    <div class="grid g3" style="margin-top:14px">
+      <div class="card"><h3>Experiment DNA</h3><div class="code">Semantic → MedCPT → HNSW → Hybrid-RRF → Reranker → Graph-2Hop → Evidence-MMR → LLM → Citation Guard</div></div>
+      <div class="card"><h3>Research Inventory</h3><div class="row">12 notebooks <span class="badge good">validated</span></div><div class="row">11 chunking methods <span class="badge good">ready</span></div><div class="row">9 retrieval modes <span class="badge good">ready</span></div></div>
+      <div class="card"><h3>Core principle</h3><div class="muted">Start deterministic. Make it adaptive. Turn on agentic behavior. Measure the delta.</div></div>
+    </div>
+  </section>
+
+  <section id="benchmark" class="page">
+    <div class="kicker">Controlled Evaluation</div><h1>Benchmark / 100 Queries</h1><p class="lead">One fixed query set, one scoring policy, many controlled configurations.</p>
+    <div class="grid g4">
+      <div class="card"><h3>Queries</h3><div class="metric">100</div><div class="muted">Same IDs every run</div></div>
+      <div class="card"><h3>Judge</h3><div class="metric">ON</div><div class="muted">Prompt/model/settings fixed</div></div>
+      <div class="card"><h3>Manual Review</h3><div class="metric">12</div><div class="muted">Disagreement cases</div></div>
+      <div class="card"><h3>Runs</h3><div class="metric">5</div><div class="muted">Current experiment set</div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Comparison Set</h3>
+      <table><tr><th>Configuration</th><th>Traditional Eval</th><th>LLM Judge</th><th>Manual Review</th><th>Status</th></tr>
+      <tr><td>Lexical</td><td>Recall / MRR / nDCG</td><td>Correctness / Grounding</td><td>Disagreement</td><td><span class="badge good">READY</span></td></tr>
+      <tr><td>Dense</td><td>Recall / MRR / nDCG</td><td>Correctness / Grounding</td><td>Disagreement</td><td><span class="badge good">READY</span></td></tr>
+      <tr><td>Hybrid</td><td>Recall / MRR / nDCG</td><td>Correctness / Grounding</td><td>Disagreement</td><td><span class="badge good">READY</span></td></tr>
+      <tr><td>Hybrid + Query Expansion</td><td>Recall / MRR / nDCG</td><td>Correctness / Grounding</td><td>Disagreement</td><td><span class="badge good">READY</span></td></tr>
+      <tr><td>Strongest / Agentic Variant</td><td>Full retrieval metrics</td><td>Full RAG metrics</td><td>Required</td><td><span class="badge good">READY</span></td></tr></table>
+    </div>
+  </section>
+
+  <section id="chunking" class="page">
+    <div class="kicker">Representation</div><h1>Chunking Lab</h1><p class="lead">Choose a conventional method, an adaptive router, or let an agent decide.</p>
+    <div class="card">
+      <h3>Execution Mode</h3><div class="mode"><button class="sel">Manual</button><button>Adaptive</button><button>Agentic</button></div>
+      <h3>Chunking Method</h3><div class="method-grid">
+        <button class="method">Fixed</button><button class="method">Recursive</button><button class="method on">Semantic</button><button class="method">Biomedical-aware</button><button class="method">Proposition</button><button class="method">Parent-Child</button><button class="method">Late Chunking</button><button class="method">Query-Adaptive</button><button class="method">LLM-Guided</button><button class="method">Agentic</button>
+      </div>
+    </div>
+    <div class="grid g4" style="margin-top:14px">
+      <div class="card"><h3>Gold Recall</h3><div class="metric">87.1%</div></div><div class="card"><h3>Boundary Quality</h3><div class="metric">84.8</div></div><div class="card"><h3>Context Preservation</h3><div class="metric">91.3%</div></div><div class="card"><h3>Chunking Regret</h3><div class="metric">0.07</div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Method Comparison</h3><table><tr><th>Method</th><th>Gold Recall</th><th>Boundary</th><th>Tokens</th><th>Regret</th></tr><tr><td>Fixed</td><td>73.4%</td><td>61.2</td><td>420</td><td>0.21</td></tr><tr><td>Semantic</td><td>87.1%</td><td>84.8</td><td>397</td><td>0.07</td></tr><tr><td>Biomedical-aware</td><td>89.0%</td><td>88.0</td><td>410</td><td>0.05</td></tr><tr><td>Agentic</td><td>91.3%</td><td>90.1</td><td>402</td><td>0.02</td></tr></table></div>
+  </section>
+
+  <section id="retrieval" class="page">
+    <div class="kicker">Retrieval</div><h1>Retrieval Lab</h1><p class="lead">Manual method selection and agentic override live in the same workspace.</p>
+    <div class="card">
+      <h3>Execution Mode</h3><div class="mode"><button class="sel">Manual</button><button>Adaptive</button><button>Agentic</button></div>
+      <h3>Retrieval Channels</h3><div class="method-grid"><button class="method on">Lexical</button><button class="method on">Dense</button><button class="method on">Hybrid</button><button class="method">GraphRAG</button><button class="method">PageIndex</button></div>
+      <div class="grid g3" style="margin-top:12px"><div><span class="muted">Fusion</span><br><select><option>RRF</option><option>Weighted Fusion</option></select></div><div><span class="muted">Candidate K</span><br><input value="50"/></div><div><span class="muted">Rerank K</span><br><input value="10"/></div></div>
+      <div class="card" style="margin-top:12px;background:var(--goldSoft);border-color:#ead8a3"><b>Agentic Override</b><div class="muted" style="margin-top:4px">When enabled, the agent may add GraphRAG, PageIndex, Query2Doc, HyDE or decomposition when evidence is insufficient.</div></div>
+    </div>
+    <div class="grid g4" style="margin-top:14px"><div class="card"><h3>Recall@5</h3><div class="metric">88%</div></div><div class="card"><h3>Recall@10</h3><div class="metric">91%</div></div><div class="card"><h3>MRR@10</h3><div class="metric">0.87</div></div><div class="card"><h3>nDCG@10</h3><div class="metric">0.89</div></div></div>
+    <div class="card" style="margin-top:14px"><h3>Retrieval Combination Leaderboard</h3><table><tr><th>#</th><th>Methods</th><th>Hit@1</th><th>MRR</th><th>Answer F1</th><th>Correctness</th><th>Faithful.</th><th>Halluc.</th></tr><tr><td>1</td><td><b>Lexical + Cross-Encoder</b></td><td class="good">93%</td><td>.946</td><td>47.9%</td><td>4.6/5</td><td>4.8/5</td><td class="good">1.9/5</td></tr><tr><td>2</td><td>Lexical + Semantic + Cross-Encoder</td><td class="good">93%</td><td>.946</td><td>47.3%</td><td>4.5/5</td><td>4.8/5</td><td class="good">2.0/5</td></tr><tr><td>3</td><td>Lexical</td><td class="good">93%</td><td>.945</td><td>48.3%</td><td>4.4/5</td><td>4.7/5</td><td class="good">1.7/5</td></tr></table></div>
+  </section>
+
+  <section id="agent" class="page">
+    <div class="kicker">Orchestration</div><h1>Agentic Orchestrator</h1><p class="lead">Agentic is a controlled execution mode, not a separate black-box product.</p>
+    <div class="card"><h3>Agentic Retrieval</h3><div class="mode"><button>Manual</button><button>Adaptive</button><button class="sel">Agentic</button></div><div class="row"><span>Allowed channels</span><b>Lexical · Dense · Hybrid · Graph · PageIndex</b></div><div class="row"><span>Recovery</span><b>Query2Doc · HyDE · Decomposition</b></div><div class="row"><span>Max rounds</span><input value="2" style="width:70px"/></div><div class="row"><span>Stop threshold</span><input value="0.85" style="width:70px"/></div></div>
+    <div class="card" style="margin-top:14px"><h3>Decision Trace</h3><div class="flow"><div class="node">Analyze</div><span class="arrow">→</span><div class="node">Route</div><span class="arrow">→</span><div class="node">Hybrid</div><span class="arrow">→</span><div class="node">Graph 2-Hop</div><span class="arrow">→</span><div class="node">Assess</div><span class="arrow">→</span><div class="node">STOP</div></div><div class="code" style="margin-top:12px">Round 1: Evidence weak
+Recovery: Query2Doc
+Round 2: Hybrid + Graph
+Evidence coverage = 91%
+Decision = STOP
+Reason = sufficient evidence / budget preserved</div></div>
+    <div class="grid g4" style="margin-top:14px"><div class="card"><h3>Decision Accuracy</h3><div class="metric">88%</div></div><div class="card"><h3>Routing Regret</h3><div class="metric">0.04</div></div><div class="card"><h3>Recovery Success</h3><div class="metric">62%</div></div><div class="card"><h3>Agent Efficiency</h3><div class="metric">0.71</div></div></div>
+  </section>
+
+  <section id="evidence" class="page">
+    <div class="kicker">Grounding</div><h1>Evidence & Grounding</h1><p class="lead">Claim → citation → passage → chunk → section → source.</p>
+    <div class="grid g2"><div class="card"><h3>Evidence Set</h3><div class="row"><b>P1821</b><span class="badge good">0.93</span></div><div class="row"><b>P1942</b><span class="badge good">0.88</span></div><div class="row"><b>P2394</b><span class="badge good">0.81</span></div></div><div class="card"><h3>Evidence Health</h3><div class="row">Coverage <b>91%</b></div><div class="row">Diversity <b>84%</b></div><div class="row">Redundancy <b>12%</b></div><div class="row">Provenance <b class="good">100%</b></div></div></div>
+  </section>
+
+  <section id="chat" class="page">
+    <div class="kicker">Answering</div><h1>Biomedical Chat</h1><p class="lead">Clean answer first; inspectable citations and grounding underneath.</p>
+    <div class="grid g2"><div class="card"><div class="card" style="background:#f5f0eb"><b>User</b><br>What mechanisms link BRCA1 to homologous recombination?</div><div class="card" style="margin-top:10px"><b>BioRAG-X</b><br><br>BRCA1 participates in DNA damage response pathways that help coordinate homologous recombination repair <span class="cite">[P1821]</span>. It contributes to recruitment and regulation of proteins involved in DNA repair <span class="cite">[P1942]</span>.<div class="claim"><b>Claim C1</b> · <span class="badge good">SUPPORTED</span> · 94%<br>Citation: <span class="cite">[P1821]</span></div><div class="claim"><b>Claim C2</b> · <span class="badge good">SUPPORTED</span> · 91%<br>Citation: <span class="cite">[P1942]</span></div></div></div>
+      <div class="card"><h3>Grounding Summary</h3><div class="row">Evidence coverage <b>91%</b></div><div class="row">Citation support <b>94.5%</b></div><div class="row">Unsupported claims <b class="good">0</b></div><div class="row">Provenance <b class="good">100%</b></div><h3 style="margin-top:15px">Evidence Journey</h3><div class="code">Claim C1
+ ↓
+[P1821]
+ ↓
+Chunk C981
+ ↓
+Section 4.2
+ ↓
+Document D182
+ ↓
+Original source</div></div></div>
+  </section>
+
+  <section id="evaluation" class="page">
+    <div class="kicker">Scoring</div><h1>Evaluation Scorecard</h1><p class="lead">Traditional retrieval metrics + LLM judge + manual review in one place.</p>
+    <div class="card"><div class="big-score"><div class="score-circle">4.8</div><div><b>LLM Judge Composite</b><div class="muted">Correctness · Faithfulness · Relevance · Context · Hallucination</div></div></div></div>
+    <div class="split" style="margin-top:14px">
+      <div class="card"><h3>Traditional Evaluation</h3><div class="row">Recall@5 <b>88%</b></div><div class="row">Recall@10 <b>91.2%</b></div><div class="row">MRR@10 <b>0.946</b></div><div class="row">nDCG@10 <b>0.91</b></div><div class="row">Latency <b>1.28s</b></div><div class="row">Cost <b>$0.061</b></div></div>
+      <div class="card"><h3>LLM Judge · RAGAS / DeepEval</h3><div class="row">Correctness <b class="good">4.9/5</b></div><div class="row">Faithfulness <b class="good">4.9/5</b></div><div class="row">Answer Relevance <b class="good">4.8/5</b></div><div class="row">Context Precision <b class="good">4.9/5</b></div><div class="row">Context Recall <b>4.7/5</b></div><div class="row">Hallucination <b class="good">4.8/5</b></div></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Manual Review</h3><div class="row">Judge / retrieval disagreements <b>12</b></div><div class="row">Citation validity issues <b class="bad">2</b></div><div class="row">Escalations <b>1</b></div></div>
+  </section>
+
+  <section id="leaderboard" class="page">
+    <div class="kicker">Comparative Research</div><h1>Configuration Leaderboard</h1><p class="lead">Never hide the trade-off between quality, grounding, latency and cost.</p>
+    <div class="card"><table><tr><th>#</th><th>Configuration</th><th>Recall@10</th><th>MRR</th><th>Answer</th><th>Faithfulness</th><th>Citation</th><th>P95</th><th>Cost</th></tr>
+    <tr><td>1</td><td><b>Lexical + Cross-Encoder</b></td><td>93%</td><td>.946</td><td>4.6</td><td>4.8</td><td>92%</td><td>420ms</td><td>$0.031</td></tr>
+    <tr><td>2</td><td>Lexical + Semantic + Cross-Encoder</td><td>93%</td><td>.946</td><td>4.5</td><td>4.8</td><td>92%</td><td>510ms</td><td>$0.038</td></tr>
+    <tr><td>3</td><td>Hybrid + RRF</td><td>91%</td><td>.932</td><td>4.7</td><td>4.8</td><td>94%</td><td>610ms</td><td>$0.044</td></tr>
+    <tr><td>4</td><td>Adaptive Agentic</td><td>91%</td><td>.940</td><td>4.9</td><td>4.9</td><td>96%</td><td>1.21s</td><td>$0.064</td></tr></table></div>
+  </section>
+
+  <section id="ablation" class="page">
+    <div class="kicker">Counterfactual Research</div><h1>Ablation / Counterfactual</h1><p class="lead">Disable one component and measure the delta.</p>
+    <div class="card"><h3>Components</h3><div class="method-grid"><button class="method on">Graph</button><button class="method on">Reranker</button><button class="method on">Agent</button><button class="method">PageIndex</button><button class="method on">Citation Guard</button><button class="method">Query Expansion</button></div><button class="run" style="margin-top:12px">Run counterfactual</button></div>
+    <div class="card" style="margin-top:14px"><table><tr><th>Variant</th><th>Recall</th><th>Answer</th><th>Grounding</th><th>P95</th><th>Cost</th></tr><tr><td>Full</td><td>91.3</td><td>4.9</td><td>4.9</td><td>1.28s</td><td>$0.061</td></tr><tr><td>− Graph</td><td>87.1</td><td>4.7</td><td>4.8</td><td>0.98s</td><td>$0.050</td></tr><tr><td>− Agent</td><td>83.4</td><td>4.5</td><td>4.7</td><td>0.83s</td><td>$0.039</td></tr></table></div>
+  </section>
+
+  <section id="failure" class="page">
+    <div class="kicker">Diagnostics</div><h1>Failure / Disagreement Explorer</h1><p class="lead">Find where retrieval, judging and generation tell different stories.</p>
+    <div class="card"><h3>Question Q082</h3><div class="row">Retrieval <b class="good">EXCELLENT · Recall 100%</b></div><div class="row">LLM Judge <b class="warn">WEAK · 2.8/5</b></div><div class="row">Likely bottleneck <b>Generation / Evidence Selection</b></div><h3 style="margin-top:14px">Failure chain</h3><div class="code">Retriever ✓
+  ↓
+Evidence set ✓
+  ↓
+Context reconstruction ✓
+  ↓
+Generation ✕
+  ↓
+Unsupported claim
+  ↓
+Citation Guard → REGENERATE</div></div>
+  </section>
+
+  <section id="architecture" class="page">
+    <div class="kicker">System</div><h1>Architecture</h1><p class="lead">One runtime powers experiments, evaluation and the chatbot.</p>
+    <div class="card"><div class="code">USER / BENCHMARK
+      ↓
+API / EXPERIMENT CONTROLLER
+      ↓
+Query Analyzer
+      ↓
+Cache
+      ↓
+CHUNKING MODE: Manual / Adaptive / Agentic
+      ↓
+Embedding + Index
+      ↓
+RETRIEVAL MODE: Manual / Adaptive / Agentic
+ ┌──────┬──────┬────────┬───────────┐
+ BM25  Dense  Hybrid   Graph     PageIndex
+ └──────┴──────┴────────┴───────────┘
+      ↓
+Reranker
+      ↓
+Evidence Selector
+      ↓
+Context Reconstruction
+      ↓
+Generation
+      ↓
+Claim Extraction
+      ↓
+Citation Validation
+      ↓
+Repair / Abstain / Answer
+      ↓
+Metrics + Trace + Experiment Store</div></div>
+    <div class="grid g3" style="margin-top:14px"><div class="card"><h3>Vector Store</h3><div class="metric">Qdrant</div><div class="muted">behind VectorStore abstraction</div></div><div class="card"><h3>Metadata / Experiments</h3><div class="metric">PostgreSQL</div></div><div class="card"><h3>Source / Artifacts</h3><div class="metric">Object Storage</div></div></div>
+  </section>
+
+  <section id="ops" class="page">
+    <div class="kicker">Operations</div><h1>Observability / SLO</h1><p class="lead">Production behavior stays visible next to research quality.</p>
+    <div class="grid g4"><div class="card"><h3>Requests/sec</h3><div class="metric">42</div></div><div class="card"><h3>P95</h3><div class="metric">1.28s</div></div><div class="card"><h3>Cache Hit</h3><div class="metric">38%</div></div><div class="card"><h3>Cost / Request</h3><div class="metric">$0.047</div></div></div>
+    <div class="card" style="margin-top:14px"><h3>Current Release</h3><div class="row">rel-001 · corpus-v1 · router-v1 <span class="badge warn">CANARY 5%</span></div><div class="row">Grounding <b>91.2%</b><span class="badge good">SLO OK</span></div><div class="row">Citation Support <b>89.7%</b><span class="badge good">SLO OK</span></div><div class="row">Version Fingerprint <b>8e4f…a92c</b></div></div>
+  </section>
+
+  <div class="footer">BioRAG-X Research Studio · Light / Claude-inspired research UI concept.</div>
+</main>
+</div>
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function runExperiment(){
+  alert("Prototype action: the selected pipeline would now run across the fixed 100-query evaluation set, generate retrieval/RAG/citation metrics, store the experiment, and refresh the leaderboard.");
+}
+</script>
+</body>
+</html>
